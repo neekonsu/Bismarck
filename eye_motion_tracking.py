@@ -1,36 +1,58 @@
-import cv2
+import cv
 import numpy as np
+import argparse
+from __future__ import print_function
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
+import random
+from pylsl import StreamInfo, StreamOutlet
 
-cap = cv2.VideoCapture("1.mp4")
+# initialize the camera and grab a reference to the raw camera capture
+camera = PiCamera()
+camera.resolution = (1280, 720)
+camera.framerate = 32
+camera.awb_mode = 'off'
+rawCapture = PiRGBArray(camera, size=(1280, 720))
 
-while True:
-    ret, frame = cap.read()
-    if ret is False:
+# allow the camera to warmup
+time.sleep(0.1)
+
+# intiialize LSL stream
+info = StreamInfo('Pupil-Coordinates', '(X,Y)', 2, 100, 'tuple', 'myuid34234')
+outlet = StreamOutlet(info)
+
+# capture frames from the camera
+def detectAndDisplay(frame):
+    frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    frame_gray = cv.equalizeHist(frame_gray)
+    #-- Detect faces
+    eyes = eyes_cascade.detectMultiScale(frame_gray)
+    for (x2,y2,w2,h2) in eyes:
+        eye_center = (x2 + w2//2, y2 + h2//2)
+        radius = int(round((w2 + h2)*0.25))
+        frame = cv.circle(frame, eye_center, radius, (255, 0, 0 ), 4)
+    cv.imshow('Capture - Face detection', frame)
+    return(eye_center)
+
+parser = argparse.ArgumentParser(description='Code for Cascade Classifier tutorial.')
+parser.add_argument('--eyes_cascade', help='Path to eyes cascade.', default='data/haarcascades/haarcascade_eye_tree_eyeglasses.xml')
+parser.add_argument('--camera', help='Camera divide number.', type=int, default=0)
+args = parser.parse_args()
+eyes_cascade_name = args.eyes_cascade
+eyes_cascade = cv.CascadeClassifier()
+
+#-- 1. Load the cascades
+if not eyes_cascade.load(cv.samples.findFile(eyes_cascade_name)):
+    print('--(!)Error loading eyes cascade')
+    exit(0)
+
+#-- 2. Read the video stream
+for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    image = frame.array
+    if image is None:
+        print('--(!) No captured frame -- Break!')
         break
-
-    roi = frame[269: 795, 537: 1416]
-    rows, cols, _ = roi.shape
-    gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    gray_roi = cv2.GaussianBlur(gray_roi, (7, 7), 0)
-
-    _, threshold = cv2.threshold(gray_roi, 3, 255, cv2.THRESH_BINARY_INV)
-    _, contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
-
-    for cnt in contours:
-        (x, y, w, h) = cv2.boundingRect(cnt)
-
-        #cv2.drawContours(roi, [cnt], -1, (0, 0, 255), 3)
-        cv2.rectangle(roi, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        cv2.line(roi, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
-        cv2.line(roi, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
+    outlet.push_sample(detectAndDisplay(image))
+    if cv.waitKey(10) == 27:
         break
-
-    cv2.imshow("Threshold", threshold)
-    cv2.imshow("gray roi", gray_roi)
-    cv2.imshow("Roi", roi)
-    key = cv2.waitKey(30)
-    if key == 27:
-        break
-
-cv2.destroyAllWindows()
