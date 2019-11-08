@@ -17,7 +17,7 @@ def imageOperations(frame):
 cap = cv2.VideoCapture('trim.mp4')
 fgbg = cv2.createBackgroundSubtractorMOG2(999, detectShadows=True)
 kernel = np.ones((25, 25),np.uint8)
-tracker = cv2.TrackerKCF_create()
+
 multiTracker = cv2.MultiTracker_create()
 bboxes = []
 
@@ -36,6 +36,7 @@ params.filterByColor = True
 params.blobColor = 0
 detector = cv2.SimpleBlobDetector_create(params)
 
+tracker = cv2.TrackerKCF_create()
 blobdetect = False 
 
 while(1):
@@ -53,32 +54,40 @@ while(1):
 
     bboxes = []
 
-    if (blobdetect == False):
-        for keypoint in keypoints:
-            if keypoint:
-                x = int(keypoint.pt[0])
-                y = int(keypoint.pt[1])
-                s = int(keypoint.size)/2
-                bbox = (x-50,y-50,100,100)
-                bboxes.append(bbox)
-                cv2.rectangle(frame, (x-100,y+100),(x+100,y-100),(255,255,255),3)
-                cv2.circle(frame, (int(bbox[0]+bbox[2]/2), int(bbox[1]+bbox[3]/2)), 2, (255,255,255))
-                cv2.circle(frame, (x, y), 5, (0,255,0))
+    
+    for keypoint in keypoints:
+        if keypoint:
+            x = int(keypoint.pt[0])
+            y = int(keypoint.pt[1])
+            s = int(keypoint.size)/2
+            bbox = (x-50,y-50,100,100)
+            bboxes.append(bbox)
+            cv2.rectangle(frame, (x-100,y+100),(x+100,y-100),(255,255,255),3)
+            cv2.circle(frame, (int(bbox[0]+bbox[2]/2), int(bbox[1]+bbox[3]/2)), 2, (255,255,255))
+            cv2.circle(frame, (x, y), 5, (0,255,0))
+            
                 
 
-
+   
     ok, box = tracker.update(frame)
     
     if (blobdetect == False):
        if (len(bboxes) == 1):
            blobdetect = True
-           #ok = tracker.init(frame, bboxes[0])
+           ok = tracker.init(frame, bboxes[0])
+                
     else:
         cv2.rectangle(frame,firstRectangleParams(box), secondRectangleParams(box),(255,0,255),3)
         cv2.circle(frame, (int(box[0]+box[2]/2), int(box[1]+box[3]/2)), 2, (255,255,255))
 
+        
+        
+        #blobdetect = False
+    
+
     cv2.imshow('frame', frame)
     #cv2.imshow('fgmask', fgmask)
+    print(bboxes)
     
     
     k = cv2.waitKey(30) & 0xff
@@ -87,5 +96,3 @@ while(1):
 
 cap.release()
 cv2.destroyAllWindows()
-
-    
