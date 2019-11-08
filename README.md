@@ -1,2 +1,2 @@
 # Bismarck
-A comprehensive software solution for stimulating, tracking, and analyzing eye-gaze for extrapolating neurological insights.
+Please run "python eye_motion_tracking_fixed.py"
