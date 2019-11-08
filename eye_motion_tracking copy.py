@@ -2,25 +2,20 @@ from __future__ import print_function
 import cv2 as cv
 import numpy as np
 import argparse
-from picamera.array import PiRGBArray
-from picamera import PiCamera
 import time
 import random
 from pylsl import StreamInfo, StreamOutlet
 
-# initialize the camera and grab a reference to the raw camera capture
-camera = PiCamera()
-camera.resolution = (1280, 720)
-camera.framerate = 32
-camera.awb_mode = 'off'
-rawCapture = PiRGBArray(camera, size=(1280, 720))
-
-# allow the camera to warmup
-time.sleep(0.1)
-
 # intiialize LSL stream
 info = StreamInfo('Pupil-Coordinates', '(X,Y)', 2, 100, 'float32', 'myuid34234')
 outlet = StreamOutlet(info)
+
+# init video object
+vidObj = cv.VideoCapture("1.mp4")
+
+# resize window
+cv.namedWindow('image', cv.WINDOW_NORMAL)
+cv.resizeWindow('image', 720,1280)
 
 # capture frames from the camera
 def detectAndDisplay(frame):
@@ -50,12 +45,18 @@ if not eyes_cascade.load(cv.samples.findFile(eyes_cascade_name)):
     exit(0)
 
 #-- 2. Read the video stream
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-    image = frame.array
+# Used as counter variable 
+count = 0
+# checks whether frames were extracted 
+success = 1
+
+while success: 
+    # vidObj object calls read 
+    # function extract frames 
+    success, image = vidObj.read() 
+    # Saves the frames with frame-count
     if image is None:
         print('--(!) No captured frame -- Break!')
         break
     outlet.push_sample(detectAndDisplay(image))
     detectAndDisplay(image)
-    if cv.waitKey(10) == 27:
-        break
