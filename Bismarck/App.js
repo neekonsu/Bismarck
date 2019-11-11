@@ -7,43 +7,29 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  TouchableOpacity
+  Text
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-// For navigation between screens
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-// Define screens and respective component names
-const MainNavigator = createStackNavigator({
-  Splash: Splash,
-  Testing: Testing
-});
-// instantiate AppContainer for navigation using MainNavigator
-const App = createAppContainer(MainNavigator);
-// Use `AppContainer` to render `App`
-export default class AppContainer extends React.Component {
-  render() {
-    return <App/>;
-  }
-}
+// For navigation between pages
+import { NativeRouter, Route, Link } from "react-router-native";
 // Splash: root screen which greets users
 class Splash extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
-    const {navigate} = this.props.navigation;
     return (
-      <TouchableOpacity style={{flex: 1, flexDirection: "row"}} onPress={() => navigate('Testing')}>
-        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
-          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+      <Link style={{flex: 1, flexDirection: "row"}} to="/Testing">
+        <View>
+          <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+            <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+          </View>
+          <View style={{flex: 1, backgroundColor: 'grey'}}/>
+          <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+            <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+          </View>
         </View>
-        <View style={{flex: 1, backgroundColor: 'grey'}}/>
-        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
-          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
-        </View>
-      </TouchableOpacity>
+      </Link>
     );
   }
 }
@@ -66,10 +52,43 @@ class Testing extends Component {
     );
   }
 }
+// App to parent the navigation system
+function App() {
+  return (
+    <NativeRouter>
+      <Route exact path="/" component={Splash} />
+      <Route path="/Testing" component={Testing} />
+    </NativeRouter>
+  );
+}
+export default App;
 // General style-definitions
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
+  },
+  container: {
+    marginTop: 25,
+    padding: 10
+  },
+  header: {
+    fontSize: 20
+  },
+  nav: {
+    flexDirection: "row",
+    justifyContent: "space-around"
+  },
+  navItem: {
+    flex: 1,
+    alignItems: "center",
+    padding: 10
+  },
+  subNavItem: {
+    padding: 5
+  },
+  topic: {
+    textAlign: "center",
+    fontSize: 15
   },
   engine: {
     position: 'absolute',
