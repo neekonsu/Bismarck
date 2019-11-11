@@ -1,77 +1,72 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
+// Keeping all components in one file for organization
+// To run, create two terminal prompts
+// Run `npx react-native start` in the first prompt
+// Run `npx react-native run-android` in the second prompt
+import React, { Component } from 'react';
+// Core components
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
+  TouchableOpacity
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+// For navigation between screens
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+// Define screens and respective component names
+const MainNavigator = createStackNavigator({
+  Splash: Splash,
+  Testing: Testing
+});
+// instantiate AppContainer for navigation using MainNavigator
+const App = createAppContainer(MainNavigator);
+// Use `AppContainer` to render `App`
+export default class AppContainer extends React.Component {
+  render() {
+    return <App/>;
+  }
+}
+// Splash: root screen which greets users
+class Splash extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <TouchableOpacity style={{flex: 1, flexDirection: "row"}} onPress={() => navigate('Testing')}>
+        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+        </View>
+        <View style={{flex: 1, backgroundColor: 'grey'}}/>
+        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
+// Testing: videoView which plays the Okazo-experiment video
+class Testing extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <View style={{flex: 1, flexDirection: "row"}}>
+        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Testing Now!</Text>
+        </View>
+        <View style={{flex: 1, backgroundColor: 'grey'}}/>
+        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Testing Now!</Text>
+        </View>
+      </View>
+    );
+  }
+}
+// General style-definitions
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
@@ -110,5 +105,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-export default App;
