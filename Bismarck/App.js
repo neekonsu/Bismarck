@@ -12,6 +12,8 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 // For navigation between pages
 import { NativeRouter, Route, Link } from "react-router-native";
+// For VideoView
+import Video from 'react-native-video';
 // Splash: root screen which greets users
 class Splash extends React.Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class Splash extends React.Component {
   render() {
     return (
       <Link style={{flex: 1, flexDirection: "row"}} to="/Testing">
-        <View>
+        <View style={{flex: 1, flexDirection: "row"}}>
           <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
             <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
           </View>
@@ -41,13 +43,7 @@ class Testing extends Component {
   render() {
     return (
       <View style={{flex: 1, flexDirection: "row"}}>
-        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
-          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Testing Now!</Text>
-        </View>
-        <View style={{flex: 1, backgroundColor: 'grey'}}/>
-        <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
-          <Text style={{textAlign: "center", textAlignVertical: "center"}}>Testing Now!</Text>
-        </View>
+        <Video source={{uri: "background"}}/>
       </View>
     );
   }
@@ -66,6 +62,13 @@ export default App;
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   container: {
     marginTop: 25,
