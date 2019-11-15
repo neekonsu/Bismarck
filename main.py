@@ -1,39 +1,26 @@
-from pylsl import StreamInfo, StreamOutlet
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import time
-import cv2
- 
+import time, os, datetime, cv2
+# set working directory and get current datetime
+wd = "/var/bismarck"
+curent_date = datetime.datetime.now().strftime("%c").replace(" ", "_")
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
-camera.resolution = (640, 480)
+camera.resolution = (1280, 720)
 camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(640, 480))
- 
+rawCapture = PiRGBArray(camera, size=camera.resolution)
+# initialize list of existing captures (xor) create working directory
+try:
+	os.mkdir(wd+"/"+curent_date)
+except OSError:
+	pass
 # allow the camera to warmup
-time.sleep(0.1)
-
-# first create a new stream info (here we set the name to BioSemi,
-# the content-type to EEG, 8 channels, 100 Hz, and float-valued data) The
-# last value would be the serial number of the device or some other more or
-# less locally unique identifier for the stream as far as available (you
-# could also omit it but interrupted connections wouldn't auto-recover).
-info = StreamInfo('BioSemi', 'EEG', 8, 100, 'float32', 'myuid34234')
-
-# next make an outlet
-outlet = StreamOutlet(info)
-
-async def push(OUTLET, frame):
-    OUTLET.push_sample(frame)
-    await asyncio.sleep(1)
-
-print("now sending data...")
+time.sleep(0.2)
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 	# grab the raw NumPy array representing the image, then initialize the timestamp
 	# and occupied/unoccupied text
 	image = frame.array
- 
 	# show the frame
 	cv2.imshow("Frame", image)
 	key = cv2.waitKey(1) & 0xFF
