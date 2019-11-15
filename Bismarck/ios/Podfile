@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'Bismarck' do
-  # Pods for Bismarck
+target 'video' do
+  # Pods for video
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,9 +34,7 @@ target 'Bismarck' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-video', :path => '../node_modules/react-native-video'
-
-  target 'BismarckTests' do
+  target 'videoTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -44,10 +42,10 @@ target 'Bismarck' do
   use_native_modules!
 end
 
-target 'Bismarck-tvOS' do
-  # Pods for Bismarck-tvOS
+target 'video-tvOS' do
+  # Pods for video-tvOS
 
-  target 'Bismarck-tvOSTests' do
+  target 'video-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

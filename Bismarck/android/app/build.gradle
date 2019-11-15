@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.bismarck"
+        applicationId "com.video"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -179,11 +179,9 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-video')
-    implementation "androidx.appcompat:appcompat:1.0.0"
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    compile project(':react-native-fs')
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
