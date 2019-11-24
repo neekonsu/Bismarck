@@ -8,6 +8,22 @@ import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 // For navigation between pages
 import { NativeRouter, Route, Link } from "react-router-native";
+// For timestamping
+var moment = require("moment");
+// For timestamp synchronization
+var firebase = require("firebase");
+const firebaseConfig = {
+  apiKey: "AIzaSyAn_mPJ2bBVWPLAms_gTNFSAecCtGIA53I",
+  authDomain: "bismarck-a7d2f.firebaseapp.com",
+  databaseURL: "https://bismarck-a7d2f.firebaseio.com",
+  projectId: "bismarck-a7d2f",
+  storageBucket: "bismarck-a7d2f.appspot.com",
+  messagingSenderId: "991036476249",
+  appId: "1:991036476249:web:ba145381c33bba4eb51a48"
+};
+// initialize firebase app
+firebase.initializeApp(firebaseConfig);
+var ref = firebase.app().database().ref();
 // Splash: root screen which greets users
 class Splash extends React.Component {
   constructor(props) {
@@ -43,6 +59,8 @@ class VideoPlayer extends Component {
       playerState: PLAYER_STATES.PLAYING,
       screenType: 'cover',
     };
+    var date = new Date();
+    ref.child("timestamps").push("Video-begin"+date.getMonth()+"month "+date.getDate()+"date "+moment().get("hour") + "hours " + moment().get("minute") + "minutes " + moment().get("second") + "seconds " + moment().get("millisecond") + "milliseconds");
   }
  
   onSeek = seek => {
@@ -69,6 +87,12 @@ class VideoPlayer extends Component {
     // Video Player will continue progress even if the video already ended
     if (!isLoading && playerState !== PLAYER_STATES.ENDED) {
       this.setState({ currentTime: data.currentTime });
+      var date = new Date();
+      ref.child("timestamps").push(data.currentTime+"data.currentTime (videoProgress)"+date.getMonth()+"month "+date.getDate()+"date "+moment().get("hour") + "hours " + moment().get("minute") + "minutes " + moment().get("second") + "seconds " + moment().get("millisecond") + "milliseconds");
+    }
+    if (!isLoading && playerState === PLAYER_STATES.ENDED) {
+      var date = new Date();
+      ref.child("timestamps").push("Video-End"+date.getMonth()+"month "+date.getDate()+"date "+moment().get("hour") + "hours " + moment().get("minute") + "minutes " + moment().get("second") + "seconds " + moment().get("millisecond") + "milliseconds");
     }
   };
   
