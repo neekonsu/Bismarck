@@ -1,4 +1,4 @@
-from picamera import PiCamera
+import picamera
 import time, os, datetime
 # set working directory and get current datetime
 wd = "/var/bismarck/"
@@ -12,7 +12,7 @@ except OSError:
 # allow the camera to warmup
 time.sleep(0.2)
 # Recording sequence
-with PiCamera() as camera:
+with picamera.PiCamera() as camera:
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.start_preview()
