@@ -1,6 +1,6 @@
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-import time, os, datetime, cv2
+import time, os, datetime
 # set working directory and get current datetime
 wd = "/var/bismarck/"
 current_date = datetime.datetime.now().strftime("%c").replace(" ", "_")
