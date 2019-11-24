@@ -17,7 +17,6 @@ with picamera.PiCamera() as camera:
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.exposure_mode = 'off'
-    camera.iso = 1000
     camera.start_preview()
     camera.annotate_background = picamera.Color('black')
     camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
