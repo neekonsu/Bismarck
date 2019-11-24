@@ -14,7 +14,7 @@ except OSError:
 # allow the camera to warmup
 time.sleep(0.2)
 # Recording sequence
-with  as camera:
+with picamera as camera:
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.start_preview()
