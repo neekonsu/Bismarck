@@ -1,5 +1,5 @@
 from picamera.array import PiRGBArray
-from picamera import PiCamera as picamera
+from picamera import PiCamera
 import time, os, datetime
 # set working directory and get current datetime
 wd = "/var/bismarck/"
