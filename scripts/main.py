@@ -3,7 +3,7 @@ import time, os
 import datetime as dt
 # set working directory and get current datetime
 wd = "/var/bismarck/"
-current_date = datetime.datetime.now().strftime("%c").replace(" ", "_")
+current_date = dt.datetime.now().strftime("%c").replace(" ", "_")
 # initialize list of existing captures (xor) create working directory
 try:
 	os.mkdir(wd)
