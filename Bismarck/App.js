@@ -11,6 +11,7 @@ import { NativeRouter, Route, Link } from "react-router-native";
 // For timestamping
 var moment = require("moment");
 // For timestamp synchronization
+console.disableYellowBox = true;
 var firebase = require("firebase");
 const firebaseConfig = {
   apiKey: "AIzaSyAn_mPJ2bBVWPLAms_gTNFSAecCtGIA53I",
@@ -47,6 +48,7 @@ class Splash extends React.Component {
 }
 // VideoPlayer: plays testing video
 class VideoPlayer extends Component {
+  
   videoPlayer;
   constructor(props) {
     super(props);
