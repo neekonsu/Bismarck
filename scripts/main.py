@@ -1,5 +1,6 @@
 import picamera
-import time, os, datetime
+import time, os
+import datetime as dt
 # set working directory and get current datetime
 wd = "/var/bismarck/"
 current_date = datetime.datetime.now().strftime("%c").replace(" ", "_")
