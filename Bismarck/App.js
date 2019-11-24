@@ -118,6 +118,7 @@ class VideoPlayer extends Component {
     return (
       <View style={styles.container}>
         <Video
+        style={{flex: 1, flexDirection: "row"}}
           onEnd={this.onEnd}
           onLoad={this.onLoad}
           onLoadStart={this.onLoadStart}
@@ -126,9 +127,9 @@ class VideoPlayer extends Component {
           ref={videoPlayer => (this.videoPlayer = videoPlayer)}
           resizeMode={this.state.screenType}
           onFullScreen={this.state.isFullScreen}
-          source={{ uri: 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4' }}
+          source={{ uri: 'https://r1---sn-q4fl6ne6.googlevideo.com/videoplayback?expire=1574571092&ei=87fZXb2SEduolQSi_ojQAQ&ip=95.216.24.230&id=o-AJulWZ8aCFPe45CrfCx06FZldlqdLG0lMSEurx1CQiC5&itag=22&source=youtube&requiressl=yes&pcm2=no&mime=video%2Fmp4&ratebypass=yes&dur=741.064&lmt=1540626570706662&fvip=1&fexp=23842630&c=WEB&txp=5431432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cpcm2%2Cmime%2Cratebypass%2Cdur%2Clmt&host=r1---sn-5go7yner.googlevideo.com&sig=ALgxI2wwRQIhAODSmdNNWKT3AiP2zU5OT0FgEeM1TijrgVyRdZ4o6Nq4AiB9uRjRW1mwcId1WWxFRGrg2Fg8OMxdi0ua6B2j1K4JpQ==&redirect_counter=1&cm2rm=sn-5gold7e&req_id=b21074369137a3ee&cms_redirect=yes&mip=2601:647:4d00:a0::da2d&mm=34&mn=sn-q4fl6ne6&ms=ltu&mt=1574549388&mv=u&mvi=0&pl=21&lsparams=mip,mm,mn,ms,mv,mvi,pl&lsig=AHylml4wRQIhAK6_3HR1VskCjD1rs3dExHJ-1ZBoyFhuBsp0zAOYtpg8AiAtfWQQmVPqV6AfnxY6KXXve--vDsWACnMNX9Fr313msA==' }}
           style={styles.mediaPlayer}
-          volume={10}
+          volume={0}
         />
       </View>
     );
