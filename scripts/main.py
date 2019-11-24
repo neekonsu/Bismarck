@@ -17,13 +17,13 @@ with picamera.PiCamera() as camera:
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.exposure_mode = 'off'
-    camera.iso = 800
+    camera.iso = 1000
     camera.start_preview()
     camera.annotate_background = picamera.Color('black')
-    camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
     camera.start_recording(wd + current_date +".h264")
     start = dt.datetime.now()
     while (dt.datetime.now() - start).seconds < 3600:
-        camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
         camera.wait_recording(0.2)
     camera.stop_recording()
