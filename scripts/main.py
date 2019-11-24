@@ -1,6 +1,7 @@
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time, os, datetime
+picamera = PiCamera()
 # set working directory and get current datetime
 wd = "/var/bismarck/"
 current_date = datetime.datetime.now().strftime("%c").replace(" ", "_")
@@ -13,7 +14,7 @@ except OSError:
 # allow the camera to warmup
 time.sleep(0.2)
 # Recording sequence
-with picamera.PiCamera() as camera:
+with  as camera:
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.start_preview()
