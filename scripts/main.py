@@ -2,16 +2,12 @@ import picamera
 import time, os
 import datetime as dt
 import atexit
-from git import Repo
 # Define procedure for program exit -> save onExit
-def onExit():
-    index.commit("+(Footage)")
-atexit.register(onExit)
+def onExit(cam):
+    cam.stop_recording()
 # set working directory and get current datetime
 wd = "/var/bismarck/"
 current_date = dt.datetime.now().strftime("%c").replace(" ", "_")
-repo = Repo.init(wd).git
-index = Repo.init(wd).index
 # initialize list of existing captures (xor) create working directory
 try:
 	os.mkdir(wd)
@@ -22,6 +18,7 @@ except OSError:
 time.sleep(0.2)
 # Recording sequence
 with picamera.PiCamera() as camera:
+    atexit.register(onExit(camera))
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.exposure_mode = 'off'
@@ -31,9 +28,7 @@ with picamera.PiCamera() as camera:
     tmp_filename = wd + current_date +".h264"
     camera.start_recording(tmp_filename)
     start = dt.datetime.now()
-    while (dt.datetime.now() - start).seconds < 3600:
+    while (dt.datetime.now() - start).seconds < 2000:
         camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
         camera.wait_recording(0.2)
     camera.stop_recording()
-    repo.add(tmp_filename)
-index.commit("+(Footage)")
