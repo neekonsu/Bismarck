@@ -1,10 +1,6 @@
 import picamera
 import time, os
 import datetime as dt
-import atexit
-# Define procedure for program exit -> save onExit
-def onExit(cam):
-    cam.stop_recording()
 # set working directory and get current datetime
 wd = "/var/bismarck/"
 current_date = dt.datetime.now().strftime("%c").replace(" ", "_")
@@ -18,7 +14,6 @@ except OSError:
 time.sleep(0.2)
 # Recording sequence
 with picamera.PiCamera() as camera:
-    atexit.register(onExit(camera))
     camera.resolution = (1280, 720)
     camera.framerate = 32
     camera.exposure_mode = 'off'
