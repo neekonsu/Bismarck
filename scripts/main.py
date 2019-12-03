@@ -23,7 +23,7 @@ with picamera.PiCamera() as camera:
     tmp_filename = wd + current_date +".h264"
     camera.start_recording(tmp_filename)
     start = dt.datetime.now()
-    while (dt.datetime.now() - start).seconds < 2000:
+    while (dt.datetime.now() - start).seconds < 1200:
         camera.annotate_text = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
         camera.wait_recording(0.2)
     camera.stop_recording()
