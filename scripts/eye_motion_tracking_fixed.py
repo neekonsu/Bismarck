@@ -1,35 +1,30 @@
 from __future__ import print_function
-import cv2 as cv
+import cv2
 import numpy as np
 import argparse
 import time
 import random
-from pylsl import StreamInfo, StreamOutlet
-
-# intiialize LSL stream
-info = StreamInfo('Pupil-Coordinates', '(X,Y)', 2, 100, 'float32', 'myuid34234')
-outlet = StreamOutlet(info)
 
 # init video object
-vidObj = cv.VideoCapture("1.mp4")
+vidObj = cv2.VideoCapture("1.mp4")
 
 # resize window
-cv.namedWindow('image', cv.WINDOW_NORMAL)
-cv.resizeWindow('image', 720,1280)
+cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('image', 720,1280)
 
 # capture frames from the camera
 def detectAndDisplay(frame):
-    frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-    frame_gray = cv.equalizeHist(frame_gray)
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frame_gray = cv2.equalizeHist(frame_gray)
     #-- Detect faces
     eyes = eyes_cascade.detectMultiScale(frame_gray)
     eye_center = (0,0)
     for (x2,y2,w2,h2) in eyes:
         eye_center = (x2 + w2//2, y2 + h2//2)
         radius = int(round((w2 + h2)*0.25))
-        frame = cv.circle(frame, eye_center, radius, (255, 0, 0 ), 4)
+        frame = cv2.circle(frame, eye_center, radius, (255, 0, 0 ), 4)
         print(eye_center)
-    cv.imshow('Capture - Face detection', frame)
+    cv2.imshow('Capture - Face detection', frame)
     return(eye_center)
 
 parser = argparse.ArgumentParser(description='Code for Cascade Classifier tutorial.')
@@ -37,10 +32,10 @@ parser.add_argument('--eyes_cascade', help='Path to eyes cascade.', default='dat
 parser.add_argument('--camera', help='Camera divide number.', type=int, default=0)
 args = parser.parse_args()
 eyes_cascade_name = args.eyes_cascade
-eyes_cascade = cv.CascadeClassifier()
+eyes_cascade = cv2.CascadeClassifier()
 
 #-- 1. Load the cascades
-if not eyes_cascade.load(cv.samples.findFile(eyes_cascade_name)):
+if not eyes_cascade.load(cv2.samples.findFile(eyes_cascade_name)):
     print('--(!)Error loading eyes cascade')
     exit(0)
 
@@ -59,7 +54,6 @@ while success:
         print('--(!) No captured frame -- Break!')
         break
     
-    if cv.waitKey(1) == ord('q'):
+    if cv2.waitKey(1) == ord('q'):
        break
-    outlet.push_sample(detectAndDisplay(image))
     detectAndDisplay(image)
